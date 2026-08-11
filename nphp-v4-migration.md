@@ -2,12 +2,28 @@
 
 > Index of NativePHP Mobile v4 EDGE component documentation, in the style of
 > `llms.txt`. Fetch only the component you need instead of crawling the docs site.
-> Every link below points at **raw markdown** — directly readable by an LLM or
-> `WebFetch`, no HTML scraping.
+> Documentation and individual source-file links use **raw content** whenever
+> possible, so an LLM or `WebFetch` can read them without HTML scraping.
 
 ## How to use this file
 
-Look up the `<native:*>` tag in the index, fetch that one raw URL, read it, done.
+Use the smallest relevant reference set, then follow it to the implementation:
+
+1. Fetch only the doc page for the API, screen behavior, or architecture concern.
+2. If the index offers a SuperNative example, fetch its `NativeComponent` PHP
+   file **and** its paired `resources/views/native/*.blade.php` view.
+3. Follow imports, layouts, child components, and Blade includes only when the
+   fetched file calls them and they apply to the migration at hand.
+4. Stop once the required behavior is understood. Do not crawl all docs or copy
+   an entire SuperNative design for an unrelated feature.
+
+The PHP component contains state, actions, routing, and data setup. Its native
+Blade view contains the EDGE tree, styling, and composition. Read both before
+using an example as a design or implementation reference.
+
+For a migration concern that is not an EDGE element, use the indexes below the
+component index. They link to the source documentation and, where available,
+the matching SuperNative `NativeComponent` implementation.
 
 URL patterns, if you need to construct one yourself:
 
@@ -18,6 +34,71 @@ Read [`introduction.md`](https://raw.githubusercontent.com/NativePHP/nativephp.c
 first if you have no context on EDGE at all, then
 [`layout.md`](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/layout.md)
 for the Tailwind-style styling and layout rules that apply across every component.
+
+## Native screen fundamentals
+
+Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/`
+
+| Doc | Covers | SuperNative implementation |
+|---|---|---|
+| [overview.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/overview.md) | NativePHP Mobile overview | [Home.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Home.php) |
+| [native-ui.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/native-ui.md) | Creating native screens | [DemoLauncher.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/DemoLauncher.php) |
+| [routing.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/routing.md) | `Route::native`, navigation, route parameters | [Browse.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Browse.php) |
+| [layouts.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/layouts.md) | Native layouts, stacks, tabs and shared chrome | [Home.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Home.php) |
+| [nested-components.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/nested-components.md) | Composing native components | [EdgeChildTest.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/EdgeChildTest.php) |
+| [events.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/events.md) | Native event channels | [EventChannelTest.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/EventChannelTest.php) |
+| [native-functions.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/native-functions.md) | Calling device functions from PHP | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) |
+| [positioning.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/positioning.md) | Absolute and overlay positioning | [ExploreLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreLayout.php) |
+| [safe-area.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/safe-area.md) | System-safe insets | [ExploreLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreLayout.php) |
+| [device.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/device.md) | Device information and platform checks | -- |
+| [dialogs.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/dialogs.md) | Native alerts, confirms and prompts | -- |
+| [file.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/file.md) | File-system access | -- |
+| [jump.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/jump.md) | Opening URLs and external apps | -- |
+| [assets.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/assets.md) | Bundled assets | -- |
+| [app-icon.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/app-icon.md) | Application icon | -- |
+| [splash-screens.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/splash-screens.md) | Splash screen configuration | -- |
+| [system.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/system.md) | System UI and device integration | -- |
+
+## Native screen behavior and app services
+
+Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/`
+
+| Doc | Covers | SuperNative implementation |
+|---|---|---|
+| [data-binding.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/data-binding.md) | Binding form controls to component state | [Counter.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Counter.php) |
+| [reactivity.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/reactivity.md) | Updating native trees from state changes | [ReactivityDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ReactivityDemo.php) |
+| [gestures.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/gestures.md) | Gesture recognition | [GestureDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/GestureDemo.php) |
+| [search.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/search.md) | Native search | [InstagramSearch.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/InstagramSearch.php) |
+| [accessibility.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/accessibility.md) | Accessibility semantics and testing | -- |
+| [authentication.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/authentication.md) | Authentication on-device | -- |
+| [databases.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/databases.md) | Local database configuration and sync | -- |
+| [deep-links.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/deep-links.md) | Deep-link routing | -- |
+| [lifecycle-hooks.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/lifecycle-hooks.md) | Application and screen lifecycle | -- |
+| [push-notifications.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/push-notifications.md) | Push permission, tokens and handlers | -- |
+| [queues.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/queues.md) | On-device queue workers | -- |
+| [security.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/security.md) | Secure storage and application hardening | -- |
+| [theming.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/theming.md) | App and native-element themes | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) |
+| [websockets.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/websockets.md) | WebSocket connections and events | -- |
+
+## Rendering architecture
+
+Read these before changing rendering, performance, or app-lifecycle behavior.
+They explain why a NativeComponent is not a webview Blade response, and why
+native UI updates must remain small and deterministic.
+
+Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/`
+
+| Doc | Covers | SuperNative implementation |
+|---|---|---|
+| [about-the-new-architecture.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/about-the-new-architecture.md) | v4 architecture and terminology | [DemoLauncher.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/DemoLauncher.php) |
+| [render-publish-mount.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/render-publish-mount.md) | Render, publish and mount lifecycle | [Counter.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Counter.php) |
+| [renderer.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/renderer.md) | PHP-to-native rendering pipeline | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) |
+| [subtree-reuse.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/subtree-reuse.md) | Stable identity and efficient subtree updates | [ReactivityDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ReactivityDemo.php) |
+| [threading-model.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/threading-model.md) | PHP and native-thread execution model | [EventChannelTest.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/EventChannelTest.php) |
+| [embedded-php.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/embedded-php.md) | Embedded Laravel/PHP runtime | -- |
+| [cross-platform-implementation.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/cross-platform-implementation.md) | Android and iOS implementation differences | -- |
+| [glossary.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/glossary.md) | Architecture vocabulary | -- |
+| [super-native.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/super-native.md) | Reference-app architecture | [SuperNative source](https://github.com/NativePHP/super-native/tree/main/app/NativeComponents) |
 
 ## Required packages
 
@@ -281,23 +362,104 @@ right native route rather than exiting to the web view.
 
 ## Reference app — `NativePHP/super-native`
 
-Kitchen-sink app. Best source for *how components compose* in real screens,
-which the per-component docs don't show. Raw file base:
-`https://raw.githubusercontent.com/NativePHP/super-native/main/`
+SuperNative is the primary source for real native-screen composition. When using
+it as a reference, fetch the matched pair in the tables below: the PHP component
+and its native Blade view. Do not use a PHP class alone to recreate a screen.
 
-Native screens live in `app/NativeComponents/`. The topic-organised demos:
+Source bases:
 
-| File | Topic |
-|---|---|
-| `app/NativeComponents/ExploreLayout.php` | layout & styling |
-| `app/NativeComponents/ExploreTypography.php` | text |
-| `app/NativeComponents/ExploreButtons.php` | buttons, pressables |
-| `app/NativeComponents/ExploreForms.php` | inputs, checkboxes, toggles |
-| `app/NativeComponents/ExplorePickers.php` | select, slider, radio |
-| `app/NativeComponents/ExploreSheets.php` | modals, bottom sheets |
-| `app/NativeComponents/ExploreMenus.php` | menus |
-| `app/NativeComponents/ExploreIcons.php` | icons |
-| `app/NativeComponents/ExploreCards.php` | composed card layouts |
+- Components: `https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/`
+- Native views: `https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/`
+
+### Component demos
+
+| Topic | NativeComponent | Native Blade view |
+|---|---|---|
+| Animation | [Animate.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Animate.php) | [animate.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/animate.blade.php) |
+| Routing and navigation | [Browse.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Browse.php) | [browse.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/browse.blade.php) |
+| Buttons and form actions | [ButtonsForm.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ButtonsForm.php) | [buttons-form.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/buttons-form.blade.php) |
+| Checkbox | [Checkbox.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Checkbox.php) | [checkbox.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/checkbox.blade.php) |
+| State and data binding | [Counter.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Counter.php) | [counter.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/counter.blade.php) |
+| General element demo | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) | [demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/demo.blade.php) |
+| Demo navigation | [DemoLauncher.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/DemoLauncher.php) | [demo-launcher.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/demo-launcher.blade.php) |
+| Native event channels | [EventChannelTest.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/EventChannelTest.php) | [event-channel-test.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/event-channel-test.blade.php) |
+| Component catalogue | [Explore.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Explore.php) | [explore.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore.blade.php) |
+| Buttons and pressables | [ExploreButtons.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreButtons.php) | [explore/buttons.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/buttons.blade.php) |
+| Composed cards | [ExploreCards.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreCards.php) | [explore/cards.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/cards.blade.php) |
+| Text inputs, checkboxes and toggles | [ExploreForms.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreForms.php) | [explore/forms.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/forms.blade.php) |
+| Icons | [ExploreIcons.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreIcons.php) | [explore-icons.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore-icons.blade.php) |
+| Layout and styling | [ExploreLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreLayout.php) | [explore/layout.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/layout.blade.php) |
+| Context menus | [ExploreMenus.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreMenus.php) | [explore/menus.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/menus.blade.php) |
+| Select, slider and radio | [ExplorePickers.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExplorePickers.php) | [explore/pickers.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/pickers.blade.php) |
+| Modal and bottom sheet | [ExploreSheets.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreSheets.php) | [explore/sheets.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/sheets.blade.php) |
+| Typography | [ExploreTypography.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ExploreTypography.php) | [explore/typography.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/explore/typography.blade.php) |
+| Game controls | [GamePad.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/GamePad.php) | [game-pad.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/game-pad.blade.php) |
+| Gestures | [GestureDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/GestureDemo.php) | [gesture-demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/gesture-demo.blade.php) |
+| Glass effect | [Glass.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Glass.php) | [glass.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/glass.blade.php) |
+| App home | [Home.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Home.php) | [home.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/home.blade.php) |
+| List detail | [ItemDetail.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ItemDetail.php) | [item-detail.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/item-detail.blade.php) |
+| Listing detail | [ListingDetail.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ListingDetail.php) | [listing-detail.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/listing-detail.blade.php) |
+| Mail-style UI | [MailDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/MailDemo.php) | [mail-demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/mail-demo.blade.php) |
+| Animated state | [NumberSwitcherDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/NumberSwitcherDemo.php) | [number-switcher.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/number-switcher.blade.php) |
+| Profile | [Profile.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Profile.php) | [profile.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/profile.blade.php) |
+| Reactivity | [ReactivityDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ReactivityDemo.php) | [reactivity-demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/reactivity-demo.blade.php), [placeholder](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/reactivity-demo-placeholder.blade.php) |
+| Pull to refresh | [RefreshableDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/RefreshableDemo.php) | [refreshable-demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/refreshable-demo.blade.php) |
+| Stack positioning | [StackPositioningDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/StackPositioningDemo.php) | [stack-positioning-demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/stack-positioning-demo.blade.php) |
+| Theming | [ThemeLab.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ThemeLab.php) | [theme-lab.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/theme-lab.blade.php) |
+| Transitions | [TransitionsDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/TransitionsDemo.php) | [transitions/index.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/transitions/index.blade.php) |
+| Transition detail | [TransitionDetail.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/TransitionDetail.php) | [transitions/detail.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/transitions/detail.blade.php) |
+| Embedded webview | [WebviewDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/WebviewDemo.php) | [webview-demo.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/webview-demo.blade.php) |
+
+### Complete design references
+
+These are complete multi-screen designs. Fetch the matching PHP class and Blade
+view for each screen needed by the design; then follow the shared data trait only
+if the migrated feature needs its fixture or interaction data.
+
+| Design | NativeComponent | Native Blade view |
+|---|---|---|
+| Twitter | [TwitterFeed.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/TwitterFeed.php) | [twitter-feed.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/twitter-feed.blade.php) |
+| Twitter | [TwitterProfile.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/TwitterProfile.php) | [twitter-profile.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/twitter-profile.blade.php) |
+| Twitter | [TweetDetail.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/TweetDetail.php) | [tweet-detail.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/tweet-detail.blade.php) |
+| Twitter | [ComposeTweet.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/ComposeTweet.php) | [compose-tweet.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/compose-tweet.blade.php) |
+| Facebook | [FacebookFeed.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/FacebookFeed.php) | [facebook-feed.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/facebook-feed.blade.php) |
+| Facebook | [FacebookPost.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/FacebookPost.php) | [facebook-post.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/facebook-post.blade.php) |
+| Facebook | [FacebookProfile.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/FacebookProfile.php) | [facebook-profile.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/facebook-profile.blade.php) |
+| Facebook | [FacebookCreate.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/FacebookCreate.php) | [facebook-create.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/facebook-create.blade.php) |
+| Instagram | [InstagramFeed.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/InstagramFeed.php) | [instagram-feed.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/instagram-feed.blade.php) |
+| Instagram | [InstagramPost.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/InstagramPost.php) | [instagram-post.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/instagram-post.blade.php) |
+| Instagram | [InstagramProfile.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/InstagramProfile.php) | [instagram-profile.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/instagram-profile.blade.php) |
+| Instagram | [InstagramSearch.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/InstagramSearch.php) | [instagram-search.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/instagram-search.blade.php) |
+| Spotify | [SpotifyHome.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SpotifyHome.php) | [spotify-home.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/spotify-home.blade.php) |
+| Spotify | [SpotifyPlaylist.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SpotifyPlaylist.php) | [spotify-playlist.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/spotify-playlist.blade.php) |
+| Spotify | [SpotifyArtist.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SpotifyArtist.php) | [spotify-artist.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/spotify-artist.blade.php) |
+| Spotify | [SpotifySearch.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SpotifySearch.php) | [spotify-search.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/spotify-search.blade.php) |
+| YouTube | [YouTubeHome.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/YouTubeHome.php) | [youtube-home.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/youtube-home.blade.php) |
+| YouTube | [YouTubeVideo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/YouTubeVideo.php) | [youtube-video.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/youtube-video.blade.php) |
+| YouTube | [YouTubeChannel.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/YouTubeChannel.php) | [youtube-channel.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/youtube-channel.blade.php) |
+| YouTube | [YouTubeSearch.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/YouTubeSearch.php) | [youtube-search.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/youtube-search.blade.php) |
+| SyncUp | [SyncUpNativeChats.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeChats.php) | [syncup/chats.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/syncup/chats.blade.php) |
+| SyncUp | [SyncUpNativeFriends.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeFriends.php) | [syncup/friends.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/syncup/friends.blade.php) |
+| SyncUp | [SyncUpNativeProfile.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeProfile.php) | [syncup/profile.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/syncup/profile.blade.php) |
+| SyncUp | [SyncUpNativeLogin.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeLogin.php) | [syncup/login.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/syncup/login.blade.php) |
+| SyncUp | [SyncUpNativeChat.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeChat.php) | [syncup-native/chat.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/syncup-native/chat.blade.php) |
+| iHerb | [IHerbStore.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/IHerbStore.php) | No matching native Blade view on upstream `main` |
+| iHerb | [IHerbCategory.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/IHerbCategory.php) | No matching native Blade view on upstream `main` |
+| iHerb | [IHerbProduct.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/IHerbProduct.php) | No matching native Blade view on upstream `main` |
+| iHerb | [IHerbCart.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/IHerbCart.php) | No matching native Blade view on upstream `main` |
+
+### Layouts, partials, and upstream gaps
+
+These layout classes build navigation or tab chrome directly and therefore do
+not have Blade views: [NativeStackLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Layouts/NativeStackLayout.php), [StackLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Layouts/StackLayout.php), [TabsLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Layouts/TabsLayout.php), and [SyncUpTabsLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Layouts/SyncUpTabsLayout.php). SyncUp also uses [SyncUpNativeTabsLayout.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/Layouts/SyncUpNativeTabsLayout.php).
+
+The general demo composes [demo-nav.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/partials/demo-nav.blade.php), [card-header.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/partials/card-header.blade.php), and [status-dot.blade.php](https://raw.githubusercontent.com/NativePHP/super-native/main/resources/views/native/partials/status-dot.blade.php). Fetch those only after `demo.blade.php` shows they are relevant.
+
+The following upstream components name views that are not present under
+`resources/views/native/` on `main`: `DoomGame`, `EdgeChildTest`, `IHerbCart`,
+`IHerbCategory`, `IHerbProduct`, `IHerbStore`, `JustifyRepro`, `TestLayout`, and
+`Testing`. Do not infer or fabricate their Blade implementations. `EdgeChildTestCard`
+returns an element directly and has no Blade view.
 
 Browse the full tree:
 

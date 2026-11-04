@@ -35,6 +35,51 @@ first if you have no context on EDGE at all, then
 [`layout.md`](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/layout.md)
 for the Tailwind-style styling and layout rules that apply across every component.
 
+The `native:` tag prefix is optional: `<native:column>` and `<column>` compile to
+the same element. The docs use the prefix; SuperNative views mostly drop it. Treat
+both spellings as equivalent when you read examples or grep a codebase.
+
+If your agent supports MCP, NativePHP hosts a docs server at
+`https://nativephp.com/api/mcp/message` (no key needed). It exposes `search_docs`,
+`get_page`, `list_edge_components`, `get_edge_component`, `search_plugins` and
+`get_plugin`, so you can query the current docs instead of fetching raw files. See
+[`mcp.md`](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/mcp.md).
+
+## Getting started and upgrading
+
+Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/`
+
+| Doc | Covers |
+|---|---|
+| [upgrade-guide.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/upgrade-guide.md) | 3.x → 4.0 (PHP 8.4, core-merged plugins, opt-in Vite), plus 4.5 and 4.6 notes |
+| [installation.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/installation.md) | Installing core and registering `nativephp/mobile-ui` |
+| [configuration.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/configuration.md) | `config/nativephp.php` keys |
+| [commands.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/commands.md) | `native:*` Artisan commands |
+| [environment-setup.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/environment-setup.md) | Toolchain requirements |
+| [development.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/development.md) | `native:run`, `native:watch`, Jump |
+| [versioning.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/getting-started/versioning.md) | Release and support policy |
+
+The changelog page is rendered from `NativePHP/mobile-air` GitHub releases, so read
+release notes from the API instead of the raw page:
+
+```bash
+curl -s https://api.github.com/repos/NativePHP/mobile-air/releases \
+  | grep -E '"(tag_name|body)"' | head -20
+```
+
+Upgrade steps that do require changes, in addition to the EDGE chrome break
+described at the end of this file:
+
+- **4.0:** PHP 8.4 minimum. Remove `nativephp/mobile-device`, `-dialog`, `-file`
+  and `-system` (`php artisan native:plugin:uninstall --core-v4`), because core
+  now declares a Composer conflict with them. Vite no longer starts with
+  `native:run`/`native:watch` unless you pass `--vite`. Run
+  `php artisan native:install --force` after `composer update`.
+- **4.5:** only a build packaged with `APP_ENV=production` can ship to the public
+  store tracks. Any other value produces a testing-only build.
+- **4.6:** translated iOS permission strings are written only for locales in the
+  new `supported_locales` config key plus `app.locale`.
+
 ## Native screen fundamentals
 
 Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/`
@@ -45,6 +90,7 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 | [native-ui.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/native-ui.md) | Creating native screens | [DemoLauncher.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/DemoLauncher.php) |
 | [routing.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/routing.md) | `Route::native`, navigation, route parameters | [Browse.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Browse.php) |
 | [layouts.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/layouts.md) | Native layouts, stacks, tabs and shared chrome | [Home.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Home.php) |
+| [middleware.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/middleware.md) | Route middleware (e.g. `auth`) on `Route::native` screens | -- |
 | [nested-components.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/nested-components.md) | Composing native components | [EdgeChildTest.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/EdgeChildTest.php) |
 | [events.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/events.md) | Native event channels | [EventChannelTest.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/EventChannelTest.php) |
 | [native-functions.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/native-functions.md) | Calling device functions from PHP | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) |
@@ -70,6 +116,9 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 | [gestures.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/gestures.md) | Gesture recognition | [GestureDemo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/GestureDemo.php) |
 | [search.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/search.md) | Native search | [InstagramSearch.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/InstagramSearch.php) |
 | [accessibility.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/accessibility.md) | Accessibility semantics and testing | -- |
+| [async-tasks.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/async-tasks.md) | Running slow work off the UI thread | -- |
+| [validation.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/validation.md) | `ValidatesInput` trait for screen state (since 4.7) | -- |
+| [localization.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/localization.md) | `supported_locales` and per-app language (since 4.6) | -- |
 | [authentication.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/authentication.md) | Authentication on-device | -- |
 | [databases.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/databases.md) | Local database configuration and sync | -- |
 | [deep-links.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/digging-deeper/deep-links.md) | Deep-link routing | -- |
@@ -100,18 +149,62 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 | [glossary.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/glossary.md) | Architecture vocabulary | -- |
 | [super-native.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/architecture/super-native.md) | Reference-app architecture | [SuperNative source](https://github.com/NativePHP/super-native/tree/main/app/NativeComponents) |
 
+## Plugins
+
+Device APIs other than Device, Dialog, File and System are plugins. Check that
+each plugin the v3 app used has a v4-compatible release, and that it is
+registered in `app/Providers/NativeServiceProvider.php`.
+
+Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/`
+
+| Doc | Covers | SuperNative implementation |
+|---|---|---|
+| [using-plugins.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/using-plugins.md) | Installing and registering plugins | -- |
+| [ui-components.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/ui-components.md) | Adding your own native element types | -- |
+| [creating-plugins.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/creating-plugins.md), [bridge-functions.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/bridge-functions.md), [validation-testing.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/validation-testing.md) | Writing or porting a plugin | -- |
+| [core/biometrics.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/biometrics.md) | Biometric prompt | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) |
+| [core/camera.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/camera.md) | Photo and video capture | [SyncUpNativeChat.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeChat.php) |
+| [core/secure-storage.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/secure-storage.md) | Keychain/Keystore storage | [AuthenticatesWithVibe.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Concerns/AuthenticatesWithVibe.php) |
+| `core/`: [browser](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/browser.md), [firebase](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/firebase.md), [geolocation](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/geolocation.md), [media-player](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/media-player.md), [microphone](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/microphone.md), [network](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/network.md), [scanner](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/scanner.md), [share](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/share.md), [vibe](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/vibe.md) | Other first-party plugins | -- |
+
+## Publishing
+
+Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/publishing/`
+
+[introduction.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/publishing/introduction.md)
+(production vs. testing builds),
+[android.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/publishing/android.md),
+[ios.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/publishing/ios.md),
+[bifrost.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/publishing/bifrost.md)
+(cloud builds).
+
 ## Required packages
 
-Components are split across **two** packages. A doc page alone is not proof a
-component is available — confirm which package provides it, and that the package
-is installed.
+EDGE needs **both** packages. Core `nativephp/mobile` owns the rendering pipeline
+and some PHP element classes. All SwiftUI and Compose **renderers**, including the
+renderers for `text` and `column`, ship in `nativephp/mobile-ui`.
 
 | Package | Provides |
 |---|---|
-| `nativephp/mobile` | Core EDGE elements: layout, navigation & chrome, text, icons, drawing |
-| `nativephp/mobile-ui` | Richer UI: lists, modals, form controls, badges, chips, tabs, webview |
+| `nativephp/mobile` | Rendering pipeline, element registry, PHP classes for layout, text, icons, chrome and drawing |
+| `nativephp/mobile-ui` | Native renderers for every element, plus the PHP classes for lists, modals, form controls, buttons, pager, webview and more |
 
-`mobile-ui` is under active development and tags ship frequently — **always check
+`mobile-ui` is a plugin, so installing it is not enough. You must also register it:
+
+```bash
+composer require nativephp/mobile-ui
+php artisan vendor:publish --tag=nativephp-plugins-provider
+php artisan native:plugin:register nativephp/mobile-ui
+php artisan native:plugin:list   # confirm NativeUIServiceProvider is listed
+```
+
+If it is missing or unregistered, `<native:button>`, `<native:list-item>` and
+the other plugin-only tags throw `Unknown native element type`. Core-class tags
+such as `<native:column>` and `<native:text>` still compile, but they **draw
+nothing on the device**. A blank screen usually means the plugin is not
+registered.
+
+`mobile-ui` is under active development and tags ship frequently. **Always check
 the latest tag rather than trusting a version pinned in this document**:
 
 ```bash
@@ -127,24 +220,25 @@ curl -s https://api.github.com/repos/NativePHP/mobile-air/tags \
   | grep '"name"' | head -5
 ```
 
-Install it if it isn't already present:
+Newer `mobile-ui` tags raise the minimum core version. Pick a `mobile-ui` tag that
+matches the core you can run, or upgrade core first:
 
-```bash
-composer show nativephp/mobile-ui >/dev/null 2>&1 \
-  && echo "installed" \
-  || composer require nativephp/mobile-ui
-```
+| `mobile-ui` | Requires `nativephp/mobile` |
+|---|---|
+| 0.4.0 | `^4.0` |
+| 0.5.0 – 0.7.0 | `^4.5` |
+| 0.8.0 | `^4.6` |
+| 0.9.0 | `^4.7` |
 
-Every `0.x` tag so far requires only `nativephp/mobile` `^4.0`, so `mobile-ui`
-does not drag in a bleeding-edge core. Confirm for the tag you pick:
+Confirm for the tag you pick:
 
 ```bash
 curl -s https://raw.githubusercontent.com/NativePHP/mobile-ui/<tag>/composer.json \
   | grep -A4 '"require"'
 ```
 
-**Install trap:** the `plugins.nativephp.com` composer repository lags behind the
-GitHub tags — it has been observed indexing `0.3.0` while `0.4.0` was already
+**Install trap:** the `plugins.nativephp.com` composer repository can lag behind
+the GitHub tags. It has been seen indexing `0.3.0` while `0.4.0` was already
 tagged. Compare the two, and add a VCS repository only if the version you need is
 missing from composer:
 
@@ -159,41 +253,54 @@ composer clear-cache && composer show nativephp/mobile-ui --all | grep versions
 ### Which package provides which component
 
 > **Snapshot, not a contract.** The lists below were taken from
-> `nativephp/mobile` 4.1.0 and `nativephp/mobile-ui` 0.4.0. Both packages gain
+> `nativephp/mobile` 4.7.0 and `nativephp/mobile-ui` 0.9.0. Both packages gain
 > elements with each tag, so treat these as "at least these exist" and re-derive
 > from your own install (commands at the end of this section).
 
-With both packages installed, **58** element tags resolve. Which package actually
-wins for each tag is determined by `mobile-ui`'s manifest, not by which package
-happens to ship a class file — so read this by tag, not by filename.
+With both packages installed, **67** element tags resolve in the PHP registry.
+Every one of them renders through `mobile-ui`. The split below only shows where
+the PHP element class comes from, which decides whether a tag compiles at all
+without the plugin.
 
-Served by **core** `nativephp/mobile` (27):
+Registered by **core** `NativeServiceProvider::registerCoreElements()` (26). These
+compile without `mobile-ui` but draw nothing on device without it:
 `bottom_nav`, `bottom_nav_item`, `canvas`, `circle`, `column`, `divider`, `fab`,
-`gesture_area`, `icon`, `image`, `lazy_grid`, `line`, `pressable`, `rect`,
-`refreshable`, `row`, `scroll_view`, `side_nav`, `side_nav_group`,
-`side_nav_header`, `side_nav_item`, `spacer`, `stack`, `text`, `top_bar`,
-`top_bar_action`, `top_bar_title`.
+`gesture_area`, `icon`, `image`, `line`, `pressable`, `rect`, `refreshable`,
+`row`, `scroll_view`, `side_nav`, `side_nav_group`, `side_nav_header`,
+`side_nav_item`, `spacer`, `stack`, `text`, `top_bar`, `top_bar_action`,
+`top_bar_title`.
 
-Served by **`nativephp/mobile-ui`** (31):
+Registered only by **`nativephp/mobile-ui`**'s manifest (41). These throw
+`Unknown native element type` without the plugin:
 `accordion`, `accordion_content`, `accordion_header`, `activity_indicator`,
-`badge`, `bare_text_input`, `bottom_sheet`, `button`, `button_group`, `carousel`,
-`checkbox`, `chip`, `date_picker`, `filled_text_input`, `floating_overlay`,
-`list`, `list_item`, `list_section`, `modal`, `native_drawer`,
-`outlined_text_input`, `progress_bar`, `radio`, `radio_group`, `select`,
-`slider`, `tab`, `tab_row`, `toggle`, `virtual_list`, `webview`.
+`background_layer`, `badge`, `bare_text_input`, `bottom_sheet`, `button`,
+`button_group`, `carousel`, `checkbox`, `chip`, `date_picker`, `emoji_picker`,
+`filled_text_input`, `floating_overlay`, `lazy_grid`, `list`, `list_item`,
+`list_placeholder`, `list_section`, `modal`, `native_drawer`,
+`outlined_text_input`, `pager`, `pager_header`, `pager_overlay`, `popover`,
+`progress_bar`, `radio`, `radio_group`, `select`, `sheet_pane`, `slider`,
+`sticky_header`, `tab`, `tab_row`, `toggle`, `virtual_list`, `webview`.
 
-So these documented components need `mobile-ui` and will not render on a
-core-only install: `accordion`, `badge`, `button-group`, `carousel`, `checkbox`,
-`chip`, `list`, `modal`, `progress-bar`, `radio-group`, `select`, `slider`,
-`tab-row`, `text-input` (all three variants), `toggle`, `virtual-list`,
-`webview`. Shipped but undocumented at the time of writing: `date-picker`,
-`native-drawer`, `floating-overlay`.
+Core still ships `Native\Mobile\Edge\Elements\{Button, Toggle, ActivityIndicator,
+BottomSheet, TextInput}`, but it no longer registers them. The `button`,
+`toggle`, `activity_indicator` and `bottom_sheet` tags resolve only to
+`Native\Mobile\UI\Elements\*`. Do not write code against the core classes for
+these tags.
 
-**Installing `mobile-ui` silently replaces four core tags.** `button`, `toggle`,
-`activity_indicator` and `bottom_sheet` stop resolving to
-`Native\Mobile\Edge\Elements\*` and start resolving to
-`Native\Mobile\UI\Elements\*`. Behaviour and supported attributes can differ, so
-re-check those four against the docs after installing.
+`lazy_grid` uses a core class (`Native\Mobile\Edge\Elements\LazyGrid`), but only
+the `mobile-ui` manifest registers it.
+
+Shipped but undocumented at the time of writing: `background_layer`,
+`date_picker`, `emoji_picker`, `floating_overlay`, `list_placeholder`,
+`native_drawer`, `pager_header`, `pager_overlay`, `popover`, `sheet_pane`,
+`sticky_header`, `top_bar_title`. Read the element class in
+`vendor/nativephp/mobile-ui/src/Elements/` before you use one of these.
+
+`divider.md` documents `horizontal-divider`, and the 0.9.0 manifest lists
+`horizontal_divider`. But the manifest points it at
+`Native\Mobile\Edge\Elements\HorizontalDivider`, and core 4.7.0 does not ship that
+class. The registry therefore skips the tag. Confirm `horizontal_divider` is in
+your registry dump before you use it; otherwise use `divider`.
 
 Watch out for two traps in this area:
 
@@ -234,9 +341,19 @@ curl -s "https://raw.githubusercontent.com/NativePHP/mobile-ui/<tag>/nativephp.j
 ```
 
 The docs site tracks `nativephp/mobile` **dev-main**, so a page may describe a
-component or attribute that no tagged release has yet. The reference app
-`super-native` pins `dev-main` from the `NativePHP/mobile-air` VCS repo for the
-same reason — check its `composer.json` for what it currently expects.
+component or attribute that no tagged release has yet. Pages mark newer features
+with a `since` version (for example `pager` is `mobile-ui` 0.5+, validation is
+core 4.7+). The reference app `super-native` pins `nativephp/mobile`
+`dev-main as 4.9.9` from the `NativePHP/mobile-air` VCS repo. At the time of
+writing its lockfile resolved `nativephp/mobile-ui` **0.3.0**, which is older
+than the docs. A SuperNative view can therefore lack attributes the docs
+describe, and the docs can describe elements SuperNative never uses. Check its
+`composer.lock` for what it currently resolves:
+
+```bash
+curl -s https://raw.githubusercontent.com/NativePHP/super-native/main/composer.lock \
+  | grep -A1 '"name": "nativephp/'
+```
 
 ## Component index
 
@@ -284,6 +401,7 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 | `list`, `list-item`, `list-section` | [list.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/list.md) |
 | `virtual-list` | [virtual-list.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/virtual-list.md) |
 | `carousel` | [carousel.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/carousel.md) |
+| `pager` (full-screen snap paging, `mobile-ui` 0.5+) | [pager.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/pager.md) |
 | `accordion`, `accordion-header`, `accordion-content` | [accordion.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/accordion.md) |
 | `webview` | [web-view.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/web-view.md) |
 
@@ -296,7 +414,8 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 | `fab` | [fab.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/fab.md) |
 | `pressable` | [pressable.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/pressable.md) |
 | `gesture-area` | [gesture-area.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/gesture-area.md) |
-| `filled-text-input`, `outlined-text-input`, `bare-text-input`, `bottom-bar` | [text-input.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/text-input.md) |
+| `filled-text-input`, `outlined-text-input`, `bare-text-input` | [text-input.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/text-input.md) |
+| `bottom-bar` (keyboard-aware bottom content) | [layouts.md#keyboard-aware-bottom-content](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/the-basics/layouts.md) |
 | `checkbox` | [checkbox.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/checkbox.md) |
 | `radio-group`, `radio` | [radio-group.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/radio-group.md) |
 | `toggle` | [toggle.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/toggle.md) |
@@ -321,16 +440,17 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 
 ## Testing native screens
 
-v4 ships a testing API for native screens — `vendor/nativephp/mobile/src/Testing/`
-(`Native.php`, `TestableComponent.php`, `FakeBridge.php`, `PestExpectations.php`,
-`TreeSpy.php`, `TestDumpHandler.php`). Confirmed present in **4.1.0**, so this is
-usable today, not dev-main only.
+v4 ships a testing API for native screens in `vendor/nativephp/mobile/src/Testing/`
+(`Native.php`, `TestableComponent.php`, `FakeBridge.php`, `FakeAsyncTask.php`,
+`PestExpectations.php`, `TreeSpy.php`, `TestDumpHandler.php`). It is present in
+tagged releases (checked on 4.1.0 and 4.7.0), not only on dev-main.
 
 This matters because ordinary Pest feature tests do **not** exercise native
-screens at all: `Route::native` returns a 200 stub under `runningUnitTests()`
-(`NativeServiceProvider.php:327-333`), so a broken layout or a missing builder
-method passes lint and the suite and fails only on device. Use these helpers to
-close that gap.
+screens at all. Under `runningUnitTests()`, `Route::native` returns a 200 stub
+whose body says "test it with Native::test() / Native::visit()"
+(`NativeServiceProvider.php:403-408` in 4.7.0). So a broken layout or a missing
+builder method passes lint and the suite, and fails only on device. Use these
+helpers to close that gap.
 
 Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/`
 
@@ -338,16 +458,18 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 |---|---|
 | [introduction.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/introduction.md) | `Native::test()`, `Native::visit()`, `Native::fakeBridge()`, `assertSee`, `assertSet` |
 | [interactions.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/interactions.md) | Pressing elements, `assertNativeCalled`, `assertWentBack` |
-| [navigation.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/navigation.md) | Flows and chrome — `assertScreen`, `assertNavigatedTo`, `assertHasTabBar`, `assertHasTab`, `assertNavTitle`, `assertMissingElement` |
+| [navigation.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/navigation.md) | Flows and chrome — `assertScreen`, `assertNavigatedTo`, `assertReplacedWith`, `assertExitedToWeb`, `assertTransition`, `assertNoNavigation`, `assertHasTabBar`, `assertHasTab`, `assertTabActive`, `assertNavTitle`, `assertMissingElement` |
 | [native-events.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/native-events.md) | Bridge events — `assertNativeCalledTimes`, `assertNativeCallOrder`, `assertAwaitingNativeEvent` |
 | [accessibility.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/accessibility.md) | `assertAccessible`, `NativeRouter::registeredRoutes()`, `PestExpectations::register()` |
 | [advanced.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/advanced.md) | `assertElement`, `assertMatchesSnapshot`, render counts (`assertRenderCount`, `assertNotRerendered`), `assertCopied` |
 
-Verified to exist on `Native` in 4.1.0: `test()`, `visit()`, `fakeBridge()`. On
-`TestableComponent`: `assertHasTabBar`, `assertHasTab`, `assertScreen`,
-`assertNavigatedTo`, `assertNavTitle`, `assertSee`, `assertSet`, `assertElement`,
-`assertMissingElement`, `assertNativeCalled`, `assertAccessible`,
-`assertMatchesSnapshot`, `assertWentBack`.
+Verified to exist on `Native` in 4.7.0: `test()`, `visit()`, `fakeBridge()`. On
+`TestableComponent`, every assertion named in the table above exists, plus
+`assertDontSee`, `assertNotSet`, `assertNativeNotCalled`,
+`assertNotAwaitingNativeEvent`, `assertRerendered`, `assertDispatched`,
+`assertNotDispatched`, `assertDispatchedTo`, `assertTabBarHidden`/`Visible`,
+`assertNavBarHidden`/`Visible`, and the `follow()`/`followNavigation()` helpers
+for walking multi-screen flows.
 
 Check any assertion before relying on it, since the docs track dev-main:
 
@@ -357,8 +479,9 @@ php -r 'require "vendor/autoload.php";
 ```
 
 Highest-value coverage for a shell migration: `assertHasTabBar` / `assertHasTab`
-to pin the tab config, and `assertNavigatedTo` to prove a tab tap replaces to the
-right native route rather than exiting to the web view.
+to pin the tab config, `assertNavigatedTo` / `assertReplacedWith` to prove a tab
+tap lands on the right native route, and `assertExitedToWeb` to pin the places
+where leaving the native stack for the web view is intended.
 
 ## Reference app — `NativePHP/super-native`
 
@@ -468,8 +591,9 @@ curl -s "https://api.github.com/repos/NativePHP/super-native/git/trees/main?recu
   | grep -o '"path": *"[^"]*"'
 ```
 
-Caveat: super-native runs dev-main, so it may use components or APIs absent from
-4.1.0. Cross-check against the installed `Elements/` directory.
+Caveat: super-native runs core dev-main, so it may use core APIs absent from
+your tagged release. Cross-check against your registry dump (see **Required
+packages**).
 
 ## Breaking change: EDGE chrome no longer works from a webview Blade layout
 
@@ -477,7 +601,13 @@ The v4 upgrade guide states that no application code changes are required. **Tha
 is not true for any app that rendered EDGE chrome — top bar, bottom nav or side
 nav — from its webview Blade layout.**
 
-v4 **removed webview-mode native chrome entirely.** Verified three ways:
+The v4 EDGE introduction page still recommends putting components in a layout
+such as `layouts/app.blade.php`. Do not follow that for a webview layout: in v4,
+`<native:*>` tags compile only inside a native-screen render (see point 3
+below).
+
+v4 **removed webview-mode native chrome entirely.** Verified three ways (still
+true in 4.7.0):
 
 1. v3's response-time flush middleware `RenderEdgeComponents` (which called
    `Edge::set()`) no longer exists — v4 ships only `HonorsRequestedNativeScreen`.
@@ -502,14 +632,20 @@ screens, will hit all three of these:
 |---|---|
 | `Class "Native\Mobile\Edge\Edge" not found` on render | `Edge::clear()` / `Edge::set()` were deleted in v4. Any Blade calling them throws. |
 | Native chrome silently disappears | `<native:*>` tags in a webview layout are no longer compiled — they emit as raw unknown HTML. |
-| Blocking XHR that 404s on every page | JS `Edge.clearSync()` / `Edge.setSync()` still ship in `native.d.ts`, but the `Edge.Set` bridge method is unregistered, so `/_native/api/call` returns `METHOD_NOT_FOUND`. A `try/catch` usually swallows it. |
+| Blocking XHR that 404s on every page | JS `Edge.clearSync()` / `Edge.setSync()` (and `SetEdge`/`ClearEdge`) still ship in `resources/dist/native.d.ts`, but the `Edge.Set` bridge method is unregistered, so `/_native/api/call` returns `METHOD_NOT_FOUND`. A `try/catch` usually swallows it. |
 
 Find every affected site:
 
 ```bash
 grep -rn 'Native\\Mobile\\Edge\|Edge::' resources/ app/ routes/ config/
 grep -rn '<native:' resources/views/
-grep -rn 'clearSync\|setSync\|Edge' resources/js/
+grep -rn 'clearSync\|setSync\|SetEdge\|ClearEdge\|Edge' resources/js/
+```
+
+The `<native:` grep misses unprefixed tags. Grep for the chrome tags as well:
+
+```bash
+grep -rnE '<(bottom-nav|top-bar|side-nav)[ >/-]' resources/views/
 ```
 
 Note the third symptom is the easiest to miss: it is not a crash, just a
@@ -530,7 +666,7 @@ Rough shape — verify against
 [`web-view.md`](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/edge-components/web-view.md)
 and `super-native` before building:
 
-1. Install `nativephp/mobile-ui` (see **Required packages**).
+1. Install **and register** `nativephp/mobile-ui` (see **Required packages**).
 2. Add a `NativeComponent` shell screen holding the chrome (e.g.
    `<native:bottom-nav>`) plus `<native:webview>` pointed at the web app.
 3. Register it with `Route::native(...)` and point `NATIVEPHP_START_URL` at it —

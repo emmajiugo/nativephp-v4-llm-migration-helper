@@ -79,6 +79,16 @@ described at the end of this file:
   store tracks. Any other value produces a testing-only build.
 - **4.6:** translated iOS permission strings are written only for locales in the
   new `supported_locales` config key plus `app.locale`.
+- **4.8:** `NativeLayout::usesNativeChrome()` now defaults to `true` (it was
+  `false` through 4.7). A layout that never overrode it switches from the
+  custom-drawn Column chrome to system `NavigationStack`/`TabView` on iOS and
+  `NavHost`/`Scaffold` on Android. Return `false` to keep the old look, but the
+  source marks that fallback as temporary. The upgrade guide does not mention
+  this yet.
+- **4.8:** after `native:install --force`, the native shell signs every event it
+  posts to `/_native/api/events`. PHP then rejects unsigned posts, so your own
+  JS that posts to that endpoint stops working. An app that updates only the
+  Composer package keeps accepting unsigned events until it rebuilds.
 
 ## Native screen fundamentals
 
@@ -161,7 +171,7 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 |---|---|---|
 | [using-plugins.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/using-plugins.md) | Installing and registering plugins | -- |
 | [ui-components.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/ui-components.md) | Adding your own native element types | -- |
-| [creating-plugins.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/creating-plugins.md), [bridge-functions.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/bridge-functions.md), [validation-testing.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/validation-testing.md) | Writing or porting a plugin | -- |
+| [creating-plugins.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/creating-plugins.md), [bridge-functions.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/bridge-functions.md), [events.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/events.md), [lifecycle-hooks.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/lifecycle-hooks.md), [permissions-dependencies.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/permissions-dependencies.md), [advanced-configuration.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/advanced-configuration.md), [validation-testing.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/validation-testing.md), [best-practices.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/best-practices.md) | Writing or porting a plugin | -- |
 | [core/biometrics.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/biometrics.md) | Biometric prompt | [Demo.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Demo.php) |
 | [core/camera.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/camera.md) | Photo and video capture | [SyncUpNativeChat.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/SyncUpNative/SyncUpNativeChat.php) |
 | [core/secure-storage.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/plugins/core/secure-storage.md) | Keychain/Keystore storage | [AuthenticatesWithVibe.php](https://raw.githubusercontent.com/NativePHP/super-native/main/app/NativeComponents/Concerns/AuthenticatesWithVibe.php) |
@@ -229,6 +239,7 @@ matches the core you can run, or upgrade core first:
 | 0.5.0 – 0.7.0 | `^4.5` |
 | 0.8.0 | `^4.6` |
 | 0.9.0 | `^4.7` |
+| 0.10.0 | `^4.8` |
 
 Confirm for the tag you pick:
 
@@ -253,7 +264,7 @@ composer clear-cache && composer show nativephp/mobile-ui --all | grep versions
 ### Which package provides which component
 
 > **Snapshot, not a contract.** The lists below were taken from
-> `nativephp/mobile` 4.7.0 and `nativephp/mobile-ui` 0.9.0. Both packages gain
+> `nativephp/mobile` 4.8.0 and `nativephp/mobile-ui` 0.10.0. Both packages gain
 > elements with each tag, so treat these as "at least these exist" and re-derive
 > from your own install (commands at the end of this section).
 
@@ -296,9 +307,9 @@ Shipped but undocumented at the time of writing: `background_layer`,
 `sticky_header`, `top_bar_title`. Read the element class in
 `vendor/nativephp/mobile-ui/src/Elements/` before you use one of these.
 
-`divider.md` documents `horizontal-divider`, and the 0.9.0 manifest lists
+`divider.md` documents `horizontal-divider`, and the 0.10.0 manifest lists
 `horizontal_divider`. But the manifest points it at
-`Native\Mobile\Edge\Elements\HorizontalDivider`, and core 4.7.0 does not ship that
+`Native\Mobile\Edge\Elements\HorizontalDivider`, and core 4.8.0 does not ship that
 class. The registry therefore skips the tag. Confirm `horizontal_divider` is in
 your registry dump before you use it; otherwise use `divider`.
 
@@ -443,12 +454,12 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 v4 ships a testing API for native screens in `vendor/nativephp/mobile/src/Testing/`
 (`Native.php`, `TestableComponent.php`, `FakeBridge.php`, `FakeAsyncTask.php`,
 `PestExpectations.php`, `TreeSpy.php`, `TestDumpHandler.php`). It is present in
-tagged releases (checked on 4.1.0 and 4.7.0), not only on dev-main.
+tagged releases (checked on 4.1.0, 4.7.0 and 4.8.0), not only on dev-main.
 
 This matters because ordinary Pest feature tests do **not** exercise native
 screens at all. Under `runningUnitTests()`, `Route::native` returns a 200 stub
 whose body says "test it with Native::test() / Native::visit()"
-(`NativeServiceProvider.php:403-408` in 4.7.0). So a broken layout or a missing
+(`NativeServiceProvider.php:403-408` in 4.7.0 and 4.8.0). So a broken layout or a missing
 builder method passes lint and the suite, and fails only on device. Use these
 helpers to close that gap.
 
@@ -461,15 +472,20 @@ Docs base: `https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resou
 | [navigation.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/navigation.md) | Flows and chrome — `assertScreen`, `assertNavigatedTo`, `assertReplacedWith`, `assertExitedToWeb`, `assertTransition`, `assertNoNavigation`, `assertHasTabBar`, `assertHasTab`, `assertTabActive`, `assertNavTitle`, `assertMissingElement` |
 | [native-events.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/native-events.md) | Bridge events — `assertNativeCalledTimes`, `assertNativeCallOrder`, `assertAwaitingNativeEvent` |
 | [accessibility.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/accessibility.md) | `assertAccessible`, `NativeRouter::registeredRoutes()`, `PestExpectations::register()` |
-| [advanced.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/advanced.md) | `assertElement`, `assertMatchesSnapshot`, render counts (`assertRenderCount`, `assertNotRerendered`), `assertCopied` |
+| [advanced.md](https://raw.githubusercontent.com/NativePHP/nativephp.com/main/resources/views/docs/mobile/4/testing/advanced.md) | `assertElement`, `assertMatchesSnapshot`, render counts (`assertRenderCount`, `assertNotRerendered`) |
 
-Verified to exist on `Native` in 4.7.0: `test()`, `visit()`, `fakeBridge()`. On
+Verified to exist on `Native` in 4.8.0: `test()`, `visit()`, `fakeBridge()`. On
 `TestableComponent`, every assertion named in the table above exists, plus
+`assertNavAction`/`assertMissingNavAction` (new in 4.8.0, not yet in the docs),
 `assertDontSee`, `assertNotSet`, `assertNativeNotCalled`,
 `assertNotAwaitingNativeEvent`, `assertRerendered`, `assertDispatched`,
 `assertNotDispatched`, `assertDispatchedTo`, `assertTabBarHidden`/`Visible`,
 `assertNavBarHidden`/`Visible`, and the `follow()`/`followNavigation()` helpers
 for walking multi-screen flows.
+
+`assertCopied()` is not a core assertion. It appears only in
+`plugins/validation-testing.md` as an example `FakeBridge::macro` that a plugin
+registers for itself.
 
 Check any assertion before relying on it, since the docs track dev-main:
 
@@ -607,7 +623,7 @@ such as `layouts/app.blade.php`. Do not follow that for a webview layout: in v4,
 below).
 
 v4 **removed webview-mode native chrome entirely.** Verified three ways (still
-true in 4.7.0):
+true in 4.8.0):
 
 1. v3's response-time flush middleware `RenderEdgeComponents` (which called
    `Edge::set()`) no longer exists — v4 ships only `HonorsRequestedNativeScreen`.
@@ -668,7 +684,12 @@ and `super-native` before building:
 
 1. Install **and register** `nativephp/mobile-ui` (see **Required packages**).
 2. Add a `NativeComponent` shell screen holding the chrome (e.g.
-   `<native:bottom-nav>`) plus `<native:webview>` pointed at the web app.
+   `<native:bottom-nav>`) plus `<native:webview php src="/your-route">`. The
+   `php` attribute is required. Without it the web view is a sandboxed foreign
+   page with JavaScript and DOM storage off, no `window.Native` bridge, and no
+   access to the app's session. In `php` mode, `src` is an app route path, not a
+   URL. A path that does not start with `/` falls back to `start_url`. Each
+   `php`-mode web view boots its own PHP context, so expect a slower first load.
 3. Register it with `Route::native(...)` and point `NATIVEPHP_START_URL` at it —
    `config/nativephp.php` `start_url` defaults to `'/'`.
 4. Remove the dead EDGE calls found by the greps above. With chrome living in the
